@@ -25,7 +25,7 @@ app.post('/api/notes',(req, res)=>{
 
     //const noteStuff = JSON.parse(req);
     //console.log(req.status);
-    const { title, text } = req.body;
+    const { title, text, id } = req.body;
     // const text = req.body.text;
     // const title = req.body.title;
    // console.log(req.body)
@@ -33,7 +33,8 @@ app.post('/api/notes',(req, res)=>{
         const noteKeys = {
             title,
             text,
-        };
+        }; 
+        noteKeys.id = makeID(1000000, 9999999);
         readNotesFile('./db/db.json')
         .then((data)=>{
             let notesArray = data;
@@ -59,7 +60,8 @@ app.post('/api/notes',(req, res)=>{
 
 });
 
-app.delete('/notes/:id',(req,res)=>{
+app.get('/api/notes/:ID')
+app.delete('/notes/:ID',(req,res)=>{
 
     res.send('ya gone!');
 });
@@ -79,3 +81,10 @@ const readNotesFile = async (filePath) => {
         console.error('There was an error', error);
     }
 };
+
+function makeID(min, max){
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    const noteID = Math.floor(Math.random()*(max - min)) + min;
+    return String(noteID);
+}
